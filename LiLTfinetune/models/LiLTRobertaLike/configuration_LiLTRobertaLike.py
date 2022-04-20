@@ -6,11 +6,17 @@ from transformers import PretrainedConfig, PreTrainedTokenizer, TensorType
 
 from transformers.utils import logging
 from transformers import RobertaConfig, XLMRobertaConfig
+import os
 
 logger = logging.get_logger(__name__)
 
-with open('tag.txt', 'r') as tagf:
-    TAG = tagf.read().lower()
+if os.path.exists('tag.txt'):
+    with open('tag.txt', 'r') as tagf:
+        TAG = tagf.read().lower()
+else:
+  print("tag.txt not detected, defaulting to monolingual LilT")
+  TAG = 'monolingual'
+  
 assert TAG == 'monolingual' or TAG == 'multilingual', 'TAG is wrong. It should be monolingual or multilingual.'
 
 if TAG == 'monolingual':

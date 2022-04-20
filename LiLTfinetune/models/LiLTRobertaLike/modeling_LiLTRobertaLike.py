@@ -903,8 +903,8 @@ class LiLTRobertaLikeForTokenClassification(LiLTRobertaLikePreTrainedModel):
 from dataclasses import dataclass
 from typing import Dict, Optional, Tuple
 from transformers.file_utils import ModelOutput
-from ...modules.decoders.re import REDecoder
-from ...utils import ReOutput
+from LiLTfinetune.modules.decoders.re import REDecoder
+from LiLTfinetune.utils import ReOutput
 
 class LiLTRobertaLikeForRelationExtraction(LiLTRobertaLikePreTrainedModel):
     _keys_to_ignore_on_load_unexpected = [r"pooler"]

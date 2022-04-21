@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import os
 
 from transformers import CONFIG_MAPPING, MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING, MODEL_NAMES_MAPPING, TOKENIZER_MAPPING
 from transformers.convert_slow_tokenizer import SLOW_TO_FAST_CONVERTERS, BertConverter, RobertaConverter, XLMRobertaConverter
@@ -20,9 +21,15 @@ TOKENIZER_MAPPING.update(
     ]
 )
 
-with open('tag.txt', 'r') as tagf:
-    TAG = tagf.read().lower()
+if os.path.exists('tag.txt'):
+    with open('tag.txt', 'r') as tagf:
+        TAG = tagf.read().lower()
+else:
+  print("tag.txt not detected, defaulting to monolingual LilT")
+  TAG = 'monolingual'
 assert TAG == 'monolingual' or TAG == 'multilingual', 'TAG is wrong. It should be monolingual or multilingual.'
+
+
 if TAG == 'monolingual':
     SLOW_TO_FAST_CONVERTERS.update({"LiLTRobertaLikeTokenizer": RobertaConverter,})
 elif TAG == 'multilingual':

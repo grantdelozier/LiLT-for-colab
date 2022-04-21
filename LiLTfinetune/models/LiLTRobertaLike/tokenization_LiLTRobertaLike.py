@@ -2,6 +2,7 @@
 
 from transformers import RobertaTokenizer, XLMRobertaTokenizer
 from transformers.utils import logging
+import os
 
 logger = logging.get_logger(__name__)
 

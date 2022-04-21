@@ -2,6 +2,7 @@
 from transformers import RobertaTokenizerFast, XLMRobertaTokenizerFast
 from transformers.file_utils import is_sentencepiece_available
 from transformers.utils import logging
+import os
 
 
 if is_sentencepiece_available():
@@ -14,8 +15,12 @@ logger = logging.get_logger(__name__)
 
 VOCAB_FILES_NAMES = {"vocab_file": "sentencepiece.bpe.model", "tokenizer_file": "tokenizer.json"}
 
-with open('tag.txt', 'r') as tagf:
-    TAG = tagf.read().lower()
+if os.path.exists('tag.txt'):
+    with open('tag.txt', 'r') as tagf:
+        TAG = tagf.read().lower()
+else:
+  print("tag.txt not detected, defaulting to monolingual LilT")
+  TAG = 'monolingual'
 assert TAG == 'monolingual' or TAG == 'multilingual', 'TAG is wrong. It should be monolingual or multilingual.'
 
 if TAG == 'monolingual':

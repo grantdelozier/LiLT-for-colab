@@ -105,10 +105,10 @@ class LiLTRobertaLikeTextEmbeddings(nn.Module):
 class LiLTRobertaLikeLayoutEmbeddings(nn.Module):
     def __init__(self, config):
         super(LiLTRobertaLikeLayoutEmbeddings, self).__init__()
-        self.x_position_embeddings = nn.Embedding(config.max_2d_position_embeddings, config.hidden_size // 6)
-        self.y_position_embeddings = nn.Embedding(config.max_2d_position_embeddings, config.hidden_size // 6)
-        self.h_position_embeddings = nn.Embedding(config.max_2d_position_embeddings, config.hidden_size // 6)
-        self.w_position_embeddings = nn.Embedding(config.max_2d_position_embeddings, config.hidden_size // 6)
+        self.x_position_embeddings = nn.Embedding(config.max_2d_position_embeddings, config.hidden_size // 6, padding_idx=0)
+        self.y_position_embeddings = nn.Embedding(config.max_2d_position_embeddings, config.hidden_size // 6, padding_idx=0)
+        self.h_position_embeddings = nn.Embedding(config.max_2d_position_embeddings, config.hidden_size // 6, padding_idx=0)
+        self.w_position_embeddings = nn.Embedding(config.max_2d_position_embeddings, config.hidden_size // 6, padding_idx=0)
 
         self.padding_idx = config.pad_token_id
         self.box_position_embeddings = nn.Embedding(

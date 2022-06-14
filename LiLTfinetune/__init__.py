@@ -2,7 +2,7 @@ from collections import OrderedDict
 import os
 import types
 
-from transformers import CONFIG_MAPPING, MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING, MODEL_NAMES_MAPPING, TOKENIZER_MAPPING
+from transformers import CONFIG_MAPPING, MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING, MODEL_NAMES_MAPPING, TOKENIZER_MAPPING, AutoConfig
 from transformers.convert_slow_tokenizer import SLOW_TO_FAST_CONVERTERS, BertConverter, RobertaConverter, XLMRobertaConverter
 from transformers.models.auto.modeling_auto import _BaseAutoModelClass, auto_class_update
 
@@ -14,7 +14,9 @@ from .models.LiLTRobertaLike import (
     LiLTRobertaLikeTokenizerFast,
 )
 
-CONFIG_MAPPING.update([("liltrobertalike", LiLTRobertaLikeConfig),])
+#CONFIG_MAPPING.update([("liltrobertalike", LiLTRobertaLikeConfig),])
+AutoConfig.register("liltrobertalike", LiLTRobertaLikeConfig)
+
 MODEL_NAMES_MAPPING.update([("liltrobertalike", "LiLTRobertaLike"),])
 TOKENIZER_MAPPING.update(
     [
@@ -44,11 +46,20 @@ MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING.update(
 #    [(LiLTRobertaLikeConfig, LiLTRobertaLikeForRelationExtraction),]
 #)
 
-cls = types.new_class("AutoModelForTokenClassification", (_BaseAutoModelClass,))
-cls._model_mapping = MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING
-cls.__name__ = "AutoModelForTokenClassification"
+class AutoModelForTokenClassification(_BaseAutoModelClass):
+    _model_mapping = MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING
+    _model_mapping.register(
+        LiLTRobertaLikeConfig, LiLTRobertaLikeForTokenClassification
+    )
 
-AutoModelForTokenClassification = auto_class_update(cls, head_doc="token classification")
+
+AutoModelForTokenClassification = auto_class_update(AutoModelForTokenClassification, head_doc="token classification")
+
+#cls = types.new_class("AutoModelForTokenClassification", (_BaseAutoModelClass,))
+#cls._model_mapping = MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING
+#cls.__name__ = "AutoModelForTokenClassification"
+
+#AutoModelForTokenClassification = auto_class_update(cls, head_doc="token classification")
 
 #AutoModelForTokenClassification = auto_class_factory(
 #    "AutoModelForTokenClassification", MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING, head_doc="token classification"

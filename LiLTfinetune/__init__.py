@@ -3,7 +3,7 @@ import os
 
 from transformers import CONFIG_MAPPING, MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING, MODEL_NAMES_MAPPING, TOKENIZER_MAPPING
 from transformers.convert_slow_tokenizer import SLOW_TO_FAST_CONVERTERS, BertConverter, RobertaConverter, XLMRobertaConverter
-from transformers.models.auto.modeling_auto import auto_class_factory
+from transformers.models.auto.modeling_auto import _BaseAutoModelClass, auto_class_update
 
 from .models.LiLTRobertaLike import (
     LiLTRobertaLikeConfig,
@@ -39,14 +39,20 @@ MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING.update(
     [(LiLTRobertaLikeConfig, LiLTRobertaLikeForTokenClassification),]
 )
 
-MODEL_FOR_RELATION_EXTRACTION_MAPPING = OrderedDict(
-    [(LiLTRobertaLikeConfig, LiLTRobertaLikeForRelationExtraction),]
-)
+#MODEL_FOR_RELATION_EXTRACTION_MAPPING = OrderedDict(
+#    [(LiLTRobertaLikeConfig, LiLTRobertaLikeForRelationExtraction),]
+#)
 
-AutoModelForTokenClassification = auto_class_factory(
-    "AutoModelForTokenClassification", MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING, head_doc="token classification"
-)
+cls = types.new_class("AutoModelForTokenClassification", (_BaseAutoModelClass,))
+cls._model_mapping = MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING
+cls.__name__ = "AutoModelForTokenClassification"
 
-AutoModelForRelationExtraction = auto_class_factory(
-    "AutoModelForRelationExtraction", MODEL_FOR_RELATION_EXTRACTION_MAPPING, head_doc="relation extraction"
-)
+AutoModelForTokenClassification = auto_class_update(cls, head_doc="token classification")
+
+#AutoModelForTokenClassification = auto_class_factory(
+#    "AutoModelForTokenClassification", MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING, head_doc="token classification"
+#)
+
+#AutoModelForRelationExtraction = auto_class_factory(
+#    "AutoModelForRelationExtraction", MODEL_FOR_RELATION_EXTRACTION_MAPPING, head_doc="relation extraction"
+#)
